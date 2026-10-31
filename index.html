@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Roots &amp; Wealth">
+<meta property="og:description" content="Three quick quizzes on Black culture, Black liberation and Black financial knowledge. Think you can get a perfect score?">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}button,a{-webkit-tap-highlight-color:transparent}</style>
+<title>Roots &amp; Wealth</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column. Home = three quiz tiles; quiz = one question card at a time with a reveal panel. Each quiz has its own color. */
+:root{
+  --bg:#F5F2EE; --surface:#FFFFFF; --ink:#1E1A17; --muted:#6B625B; --line:#E4DDD5;
+  --red:#B23A2E; --green:#2D6A45; --gold:#9A6A0C;
+  --good:#2D6A45; --good-soft:#DCEFE3; --bad:#B23A2E; --bad-soft:#F6DEDA;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --accent:var(--red);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141210; --surface:#1F1B18; --ink:#F3EEE8; --muted:#A99F96; --line:#36302B;
+  --red:#F07A6B; --green:#6CC892; --gold:#E3B04B;
+  --good:#6CC892; --good-soft:#18301F; --bad:#F07A6B; --bad-soft:#3A1D19; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141210; --surface:#1F1B18; --ink:#F3EEE8; --muted:#A99F96; --line:#36302B;
+  --red:#F07A6B; --green:#6CC892; --gold:#E3B04B;
+  --good:#6CC892; --good-soft:#18301F; --bad:#F07A6B; --bad-soft:#3A1D19; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 48px}
+.wrap{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.stripe{display:flex;height:6px;border-radius:3px;overflow:hidden;width:96px}
+.stripe i{flex:1}.stripe i:nth-child(1){background:var(--red)}.stripe i:nth-child(2){background:var(--ink)}.stripe i:nth-child(3){background:var(--green)}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(36px,9vw,56px);line-height:1;margin:10px 0;text-wrap:balance;letter-spacing:-.01em}
+.dek{color:var(--muted);margin:0;max-width:54ch}
+.tiles{display:grid;gap:12px}
+a.tile{display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:12px;padding:18px 18px 18px 16px;transition:transform .15s,border-color .15s}
+a.tile:hover{transform:translateX(3px)}
+a.tile:focus-visible,.btn:focus-visible,button.choice:focus-visible,.back:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tile h2{font-family:var(--display);font-weight:800;font-size:23px;margin:0;grid-column:1}
+.tile p{margin:0;color:var(--muted);font-size:15px;grid-column:1}
+.tile .count{grid-column:2;grid-row:1/3;font-family:var(--mono);font-size:13px;color:var(--c);white-space:nowrap}
+.best{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.back{align-self:flex-start;font-family:var(--mono);font-size:13px;color:var(--muted);text-decoration:none}
+.progress{display:flex;gap:5px}
+.progress span{flex:1;height:6px;border-radius:3px;background:var(--line);transition:background .25s}
+.progress span.right{background:var(--good)}.progress span.wrong{background:var(--bad)}.progress span.now{background:var(--accent)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.qnum{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+.q{font-family:var(--display);font-weight:500;font-size:clamp(21px,5vw,26px);line-height:1.22;margin:0;text-wrap:balance}
+.choices{display:grid;gap:10px}
+.choices.tf{grid-template-columns:1fr 1fr}
+button.choice{font:inherit;font-size:16px;text-align:left;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:13px 15px;cursor:pointer;transition:border-color .15s,background .15s}
+.choices.tf button.choice{text-align:center;font-family:var(--display);font-weight:800;font-size:19px}
+button.choice:hover:not(:disabled){border-color:var(--accent)}
+button.choice:disabled{cursor:default}
+button.choice.correct{background:var(--good-soft);border-color:var(--good)}
+button.choice.picked-wrong{background:var(--bad-soft);border-color:var(--bad)}
+button.choice.dim{opacity:.55}
+.reveal{border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:12px;animation:rise .3s ease}
+@keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){.reveal{animation:none}a.tile{transition:none}}
+.verdict{font-family:var(--display);font-weight:800;font-size:20px}
+.verdict.ok{color:var(--good)}.verdict.no{color:var(--bad)}
+.explain{margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font-family:var(--display);font-weight:800;font-size:17px;background:var(--accent);color:var(--bg);border:0;border-radius:999px;padding:12px 22px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.score{font-family:var(--display);font-weight:800;font-size:clamp(60px,18vw,96px);line-height:.9;color:var(--accent);font-variant-numeric:tabular-nums}
+.score small{font-size:.35em;color:var(--muted)}
+.rank{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,32px);line-height:1.1;text-wrap:balance}
+.note{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:0}
+.copied{font-family:var(--mono);font-size:12px;color:var(--good);align-self:center}
+</style>
+
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+const QUIZZES = {
+  culture:{title:"The Culture", kicker:"Black culture", color:"--red",
+    dek:"Music, books, holidays and institutions that shaped Black American life.",
+    note:"",
+    qs:[
+      {q:"Juneteenth marks the day news of freedom reached enslaved people in which city?", choices:["Charleston, South Carolina","Galveston, Texas","New Orleans, Louisiana","Richmond, Virginia"], a:1,
+       ex:"Union troops arrived in Galveston on June 19, 1865, about two and a half years after the Emancipation Proclamation. Juneteenth became a federal holiday in 2021."},
+      {q:"Hip-hop is traced to a 1973 back-to-school party thrown by DJ Kool Herc. Which borough was it in?", choices:["Brooklyn","Harlem, Manhattan","Queens","The Bronx"], a:3,
+       ex:"The party was in the rec room at 1520 Sedgwick Avenue in the Bronx. Herc's trick of looping the drum break of a record laid the groundwork for the whole culture."},
+      {type:"tf", q:"True or false: Hip-hop's four core elements are usually named as DJing, MCing, breaking and graffiti.", a:0,
+       ex:"True. Those four took shape together in the Bronx in the 1970s. Many people add a fifth, knowledge, popularized by Afrika Bambaataa and the Universal Zulu Nation."},
+      {type:"tf", q:"True or false: Kwanzaa is a religious holiday meant to replace Christmas.", a:1,
+       ex:"False. Kwanzaa is a cultural celebration, not a religious one, held December 26 to January 1. People of any faith observe it, and many celebrate Christmas too."},
+      {q:"Who wrote the novel Their Eyes Were Watching God?", choices:["Toni Morrison","Alice Walker","Zora Neale Hurston","Nella Larsen"], a:2,
+       ex:"Zora Neale Hurston published it in 1937. She was also a trained anthropologist who collected Black folklore across the South and the Caribbean."},
+      {q:"\"Lift Every Voice and Sing,\" often called the Black national anthem, was written by whom?", choices:["James Weldon Johnson","Langston Hughes","W.E.B. Du Bois","Paul Laurence Dunbar"], a:0,
+       ex:"James Weldon Johnson wrote the words in 1900 and his brother J. Rosamond Johnson set them to music. The NAACP later adopted it as its official song."},
+      {q:"How many principles, the Nguzo Saba, does Kwanzaa celebrate?", choices:["Five","Seven","Ten","Twelve"], a:1,
+       ex:"Seven, one for each night: unity, self-determination, collective work, cooperative economics, purpose, creativity and faith. Maulana Karenga created the holiday in 1966."},
+      {q:"Which is recognized as the oldest historically Black college or university?", choices:["Howard University","Morehouse College","Cheyney University of Pennsylvania","Fisk University"], a:2,
+       ex:"Cheyney University was founded in 1837 as the Institute for Colored Youth, decades before most HBCUs opened after the Civil War."},
+      {q:"Who created and hosted Soul Train?", choices:["Dick Gregory","Don Cornelius","Berry Gordy","Quincy Jones"], a:1,
+       ex:"Don Cornelius launched it in Chicago and took it national in 1971. It ran for 35 years and gave Black artists a national stage TV mostly denied them."},
+      {q:"Who was the first Black writer to win a Pulitzer Prize?", choices:["Gwendolyn Brooks","Ralph Ellison","Richard Wright","Langston Hughes"], a:0,
+       ex:"Gwendolyn Brooks won the 1950 Pulitzer for poetry for Annie Allen. She later became Poet Laureate of Illinois."}
+    ]},
+  liberation:{title:"The Struggle", kicker:"Black liberation", color:"--green",
+    dek:"Resistance, organizing and the people who pushed freedom forward.",
+    note:"",
+    qs:[
+      {q:"Which country became the first nation founded by formerly enslaved people after a successful revolt?", choices:["Jamaica","Liberia","Haiti","Brazil"], a:2,
+       ex:"Haiti declared independence in 1804 after a 13-year revolution against France. It was the only slave revolt in history to found a nation."},
+      {q:"Harriet Tubman was widely known by what nickname?", choices:["The General","Moses","The Conductor Queen","Mother Freedom"], a:1,
+       ex:"Moses, after the biblical leader who led his people out of bondage. She escaped in 1849 and went back South again and again to guide others out."},
+      {q:"Journalist Ida B. Wells is best known for investigating what?", choices:["Lynching","Prison labor","Sharecropping contracts","Voter suppression"], a:0,
+       ex:"Lynching. Her reporting showed that the usual excuses for it were false, and she risked her life to publish it. She was also a founding member of the NAACP in 1909."},
+      {type:"tf", q:"True or false: The Emancipation Proclamation freed every enslaved person in the United States.", a:1,
+       ex:"False. In 1863 it applied only to Confederate states in rebellion, not to slaveholding border states that stayed in the Union. Slavery ended nationwide with the 13th Amendment in December 1865."},
+      {type:"tf", q:"True or false: Rosa Parks was the first person arrested in Montgomery for refusing to give up her bus seat.", a:1,
+       ex:"False. Nine months earlier, 15-year-old Claudette Colvin was arrested for the same act. Organizers chose Parks, a respected NAACP secretary, as the face of the boycott."},
+      {q:"Marcus Garvey's movement launched a shipping company meant to link Black people across the world. What was it called?", choices:["The Freedom Fleet","The Black Star Line","The Ethiopian Navigation Co.","The Pan-African Line"], a:1,
+       ex:"The Black Star Line, launched in 1919 by Garvey's Universal Negro Improvement Association. At its peak the UNIA had chapters in dozens of countries."},
+      {q:"How long did the Montgomery Bus Boycott last?", choices:["30 days","100 days","381 days","2 years"], a:2,
+       ex:"381 days, from December 1955 to December 1956. Black residents walked, carpooled and ran their own ride network until the buses were desegregated."},
+      {q:"\"Bloody Sunday\" in 1965 took place on which bridge?", choices:["Edmund Pettus Bridge","Brooklyn Bridge","Arlington Memorial Bridge","Natchez Trace Bridge"], a:0,
+       ex:"The Edmund Pettus Bridge in Selma, Alabama, where state troopers attacked marchers led by John Lewis and Hosea Williams. The violence helped push the Voting Rights Act through that August."},
+      {q:"Fannie Lou Hamer helped found which group to challenge Mississippi's all-white delegation in 1964?", choices:["SNCC","The Mississippi Freedom Democratic Party","The Southern Christian Leadership Conference","The Congress of Racial Equality"], a:1,
+       ex:"The Mississippi Freedom Democratic Party. Her televised testimony at the 1964 Democratic convention about being beaten for trying to register to vote reached millions."},
+      {q:"Which Black Panther Party program fed thousands of children every day?", choices:["Free Breakfast for Children","Meals for Freedom","The People's Pantry","Community Lunch Program"], a:0,
+       ex:"The Free Breakfast for Children program, started in 1969. It spread to cities nationwide and is often credited with pressuring the federal government to expand school breakfast."}
+    ]},
+  money:{title:"The Bag", kicker:"Black financial knowledge", color:"--gold",
+    dek:"Retirement accounts, credit, investing and Black economic history.",
+    note:"For learning, not personal financial advice. Rules and limits change, so check current IRS figures before acting.",
+    qs:[
+      {q:"What does IRA stand for?", choices:["Investment Return Agreement","Individual Retirement Account","Income Reserve Account","Insured Retirement Annuity"], a:1,
+       ex:"Individual Retirement Account. It's a tax-advantaged account you open yourself at a bank or brokerage, separate from any job. Anyone with earned income can have one."},
+      {q:"What is the main perk of a Roth IRA?", choices:["You get a tax deduction now","Qualified withdrawals in retirement are tax-free","Your money is FDIC insured","There is no limit on contributions"], a:1,
+       ex:"You pay tax on the money going in, then qualified withdrawals in retirement are tax-free, growth included. A traditional IRA flips it: possible deduction now, taxes when you withdraw."},
+      {type:"tf", q:"True or false: You can open an IRA even if your job already offers a 401(k).", a:0,
+       ex:"True. You can have both. The 401(k) may limit whether a traditional IRA contribution is tax-deductible at higher incomes, but you can still contribute."},
+      {q:"Your job offers a 401(k) match. What is the usual first move?", choices:["Skip it until debt is paid off","Contribute at least enough to get the full match","Put it all in your employer's stock","Wait until you're 40"], a:1,
+       ex:"Get the full match. If your employer matches 50 cents per dollar up to 6% of pay, contributing less leaves part of your compensation on the table."},
+      {q:"The Rule of 72 estimates how long it takes money to double. At an 8% yearly return, about how long?", choices:["5 years","9 years","15 years","20 years"], a:1,
+       ex:"About 9 years: 72 divided by 8. That's why starting early matters so much. Money invested at 25 has several more doublings ahead than money invested at 45."},
+      {q:"What is an index fund?", choices:["A fund that picks a few hot stocks","A savings account tied to inflation","A fund that owns a slice of a whole market index","A government bond"], a:2,
+       ex:"It buys all the stocks in an index, like the S&P 500, so you own a small piece of hundreds of companies. Fees tend to be low and you're not betting on any one company."},
+      {q:"Common FICO credit scores range from what to what?", choices:["0 to 100","100 to 500","300 to 850","500 to 1,000"], a:2,
+       ex:"300 to 850. Paying on time and keeping balances low compared to your limits are the two biggest factors you control."},
+      {type:"tf", q:"True or false: A retirement account usually goes to the beneficiary you listed on the account, even if your will says otherwise.", a:0,
+       ex:"True. Beneficiary designations on IRAs, 401(k)s and life insurance generally override a will. Check yours after a marriage, divorce or new child."},
+      {q:"Maggie Lena Walker made history in 1903 by doing what?", choices:["Founding the first Black-owned insurance company","Becoming the first woman to charter a U.S. bank","Opening the first Black stock brokerage","Building the first Black-owned department store"], a:1,
+       ex:"She chartered St. Luke Penny Savings Bank in Richmond, Virginia, and became the first woman of any race to charter a bank in the U.S. It helped Black families buy homes when other banks wouldn't lend to them."},
+      {q:"The prosperous Black district known as \"Black Wall Street\" was in which city?", choices:["Durham, North Carolina","Tulsa, Oklahoma","Atlanta, Georgia","Chicago, Illinois"], a:1,
+       ex:"Greenwood in Tulsa, Oklahoma. In 1921 a white mob burned about 35 blocks, killing as many as 300 people and wiping out generations of wealth. Durham's Parrish Street was also called Black Wall Street."},
+      {q:"In the Federal Reserve's 2022 survey, about how many times more wealth did the median white household hold than the median Black household?", choices:["About 2 times","About 3 times","About 6 times","About 20 times"], a:2,
+       ex:"About 6 times: roughly $285,000 versus $45,000. Much of that gap traces to homeownership and inheritance, which is why retirement accounts and beneficiary planning matter."}
+    ]}
+};
+
+// Score titles per quiz, from a perfect score down: [title, line]
+const RANKS = {
+  culture:[
+    ["Cookout Royalty","Perfect score. You get a plate to take home, and nobody's checking your potato salad."],
+    ["Spades Partner Material","You know the culture. Uncles are fighting over who gets to team up with you."],
+    ["Invited, With Conditions","You can come to the cookout, but you're on ice duty until you run it back."],
+    ["Bring the Paper Plates","Auntie said sit down and listen. Take it again and earn a real dish."]
+  ],
+  liberation:[
+    ["Freedom School Valedictorian","Perfect score. Ida B. Wells would have put you on the masthead."],
+    ["Front of the March","You did the reading. Organizers would hand you the clipboard."],
+    ["Still on the Bridge","You've made it partway across. The rest of the march is one retake away."],
+    ["The Struggle Continues","So does your studying. Run it back and walk out of here a historian."]
+  ],
+  money:[
+    ["Black Wall Street Banker","Perfect score. Maggie Lena Walker would hand you a charter."],
+    ["Fully Vested","Your money knowledge is compounding nicely. Keep stacking."],
+    ["Getting the Match","You're collecting the free money, just not maxing out yet. One more round."],
+    ["Overdraft Alert","Your knowledge is sitting in a 0.01% savings account. Time to move it."]
+  ]
+};
+function rankFor(id,score,n){const r=RANKS[id];const p=score/n;return score===n?r[0]:p>=.7?r[1]:p>=.4?r[2]:r[3]}
+const app=document.getElementById("app");
+const BASE=location.origin+location.pathname;
+function linkFor(id){return id?BASE+"#"+id:BASE}
+function shareRow(text,label,id){
+  const row=el("div","row"); const b=el("button","btn ghost",label); b.id=id;
+  const msg=el("span","copied"); msg.hidden=true;
+  b.onclick=()=>{const done=()=>{msg.textContent="Copied. Paste it into a text.";msg.hidden=false};
+    const fail=()=>{msg.textContent=text;msg.hidden=false};
+    try{navigator.clipboard.writeText(text).then(done,fail)}catch(e){fail()}};
+  row.append(b,msg); return row;
+}
+const BEST_KEY="rw-best";
+function getBest(){try{return JSON.parse(localStorage.getItem(BEST_KEY))||{}}catch(e){return {}}}
+function setBest(id,s){try{const b=getBest();if(!b[id]||s>b[id]){b[id]=s;localStorage.setItem(BEST_KEY,JSON.stringify(b))}}catch(e){}}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function setAccent(v){document.documentElement.style.setProperty("--accent",v?`var(${v})`:"var(--red)")}
+
+function home(){
+  setAccent(null); app.innerHTML="";
+  const h=el("header");
+  h.innerHTML=`<div class="stripe"><i></i><i></i><i></i></div><h1>Roots &amp; Wealth</h1>`;
+  h.appendChild(el("p","dek","Three quizzes on Black culture, liberation and money. Pick one, answer as you go, and send a quiz to a friend to see who scores higher."));
+  app.appendChild(h);
+  const tiles=el("div","tiles"); const best=getBest();
+  Object.entries(QUIZZES).forEach(([id,qz])=>{
+    const a=el("a","tile"); a.href="#"+id; a.style.setProperty("--c",`var(${qz.color})`);
+    a.appendChild(el("h2",null,qz.title)); a.appendChild(el("p",null,qz.dek));
+    a.appendChild(el("span","count",best[id]!=null?`Best ${best[id]}/${qz.qs.length}`:`${qz.qs.length} questions`));
+    tiles.appendChild(a);
+  });
+  app.appendChild(tiles);
+  app.appendChild(shareRow(`Test what you know about Black culture, liberation and money. Three quick quizzes: ${linkFor()}`,"Copy link to text a friend","share-home"));
+}
+
+function runQuiz(id){
+  const qz=QUIZZES[id]; setAccent(qz.color);
+  let i=0,score=0,results=[];
+  app.innerHTML="";
+  const back=el("a","back","← All quizzes"); back.href="#";
+  const h=el("header"); h.appendChild(el("div","kicker",qz.kicker)); h.appendChild(el("h1",null,qz.title)); h.appendChild(el("p","dek",qz.dek));
+  const prog=el("div","progress"); prog.setAttribute("aria-hidden","true");
+  const stage=el("main"); stage.setAttribute("aria-live","polite");
+  app.append(back,h,shareRow(`Try the "${qz.title}" quiz on ${qz.kicker.toLowerCase()}: ${linkFor(id)}`,"Copy quiz link",id+"-share"),prog,stage);
+  if(qz.note) app.appendChild(el("p","note",qz.note));
+
+  function drawProgress(){prog.innerHTML="";qz.qs.forEach((_,k)=>{const s=el("span");if(results[k]===true)s.className="right";else if(results[k]===false)s.className="wrong";else if(k===i)s.className="now";prog.appendChild(s)})}
+  function render(){
+    drawProgress(); if(i>=qz.qs.length) return finish();
+    const item=qz.qs[i], choices=item.type==="tf"?["True","False"]:item.choices;
+    stage.innerHTML="";
+    const card=el("section","card"); card.appendChild(el("div","qnum",`Question ${i+1} of ${qz.qs.length}`)); card.appendChild(el("h2","q",item.q));
+    const box=el("div","choices"+(item.type==="tf"?" tf":""));
+    choices.forEach((c,k)=>{const b=el("button","choice",c);b.id=`${id}-q${i}-c${k}`;b.onclick=()=>answer(k,box,card,item);box.appendChild(b)});
+    card.appendChild(box); stage.appendChild(card);
+  }
+  function answer(k,box,card,item){
+    const right=k===item.a; if(right)score++; results[i]=right;
+    [...box.children].forEach((b,n)=>{b.disabled=true;if(n===item.a)b.classList.add("correct");else if(n===k)b.classList.add("picked-wrong");else b.classList.add("dim")});
+    const r=el("div","reveal"); r.appendChild(el("div","verdict "+(right?"ok":"no"),right?"Correct.":"Not quite.")); r.appendChild(el("p","explain",item.ex));
+    const next=el("button","btn",i===qz.qs.length-1?"See your score":"Next question"); next.id=`${id}-next${i}`;
+    next.onclick=()=>{i++;render();window.scrollTo({top:0,behavior:"smooth"})};
+    r.appendChild(next); card.appendChild(r); drawProgress(); next.focus({preventScroll:true});
+  }
+  function finish(){
+    setBest(id,score); const n=qz.qs.length; const [rank,line]=rankFor(id,score,n);
+    stage.innerHTML="";
+    const card=el("section","card"); card.appendChild(el("div","qnum","Your score"));
+    const s=el("div","score"); s.innerHTML=`${score}<small> / ${n}</small>`; card.appendChild(s);
+    card.appendChild(el("div","rank",rank));
+    card.appendChild(el("p","explain",line));
+    const row=el("div","row");
+    const again=el("button","btn","Take it again"); again.id=id+"-again"; again.onclick=()=>{i=0;score=0;results=[];render()};
+    const brag=el("button","btn ghost","Copy my score"); brag.id=id+"-copy";
+    const ok=el("span","copied"); ok.hidden=true;
+    brag.onclick=()=>{const t=`I got ${score}/${n} on the "${qz.title}" quiz and earned the title "${rank}." Think you can beat me? ${linkFor(id)}`;
+      const done=()=>{ok.textContent="Copied. Paste it into a text.";ok.hidden=false};
+      try{navigator.clipboard.writeText(t).then(done,()=>{ok.textContent=t;ok.hidden=false})}catch(e){ok.textContent=t;ok.hidden=false}};
+    const more=el("a","btn ghost","Other quizzes"); more.href="#";
+    row.append(again,brag,more,ok); card.appendChild(row); stage.appendChild(card);
+  }
+  render();
+}
+
+function route(){const id=location.hash.replace("#","");if(QUIZZES[id])runQuiz(id);else home();window.scrollTo(0,0)}
+window.addEventListener("hashchange",route); route();
+</script>
+</body>
+</html>
