@@ -74,6 +74,11 @@ button.choice.dim{opacity:.55}
 .score small{font-size:.35em;color:var(--muted)}
 .rank{font-family:var(--display);font-weight:800;font-size:clamp(24px,6vw,32px);line-height:1.1;text-wrap:balance}
 .note{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin:0}
+.topic{display:flex;flex-direction:column;gap:8px}
+.older{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--muted);padding-left:10px}
+.chip{color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px;text-decoration:none}
+.chip:hover{border-color:var(--ink)}
+.chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .copied{font-family:var(--mono);font-size:12px;color:var(--good);align-self:center}
 </style>
 
@@ -166,7 +171,18 @@ const QUIZZES = {
     qs:[{"type": "tf", "q": "True or false: Eating tofu and other soy foods will make Black men grow breasts or lose testosterone.", "a": 1, "ex": "False. Clinical studies of men eating normal amounts of soy found no change in testosterone or estrogen. The rare case reports involved extreme intake, like about three quarts of soy milk a day. Tofu is a cheap, solid protein."}, {"q": "Which soul food staple has the most protein per cooked cup?", "choices": ["Collard greens", "Black-eyed peas", "Candied yams", "Cornbread"], "a": 1, "ex": "Black-eyed peas, with about 13 grams per cooked cup. The New Year's Day peas are a protein food in their own right. Red beans, butter beans, lentils and peanuts are other strong plant sources."}, {"type": "tf", "q": "True or false: Red beans and rice have to be eaten in the same bite to give you \"complete\" protein.", "a": 1, "ex": "False. Your body pools amino acids from everything you eat over the day. Beans at lunch and rice at dinner still count. Eating a mix of plant foods covers it."}, {"q": "A 16-ounce glass of Southern sweet tea often has about how much sugar?", "choices": ["Less than 1 teaspoon", "About 2 teaspoons", "6 to 10 teaspoons", "None if it's homemade"], "a": 2, "ex": "Often 6 to 10 teaspoons, depending on how heavy the hand is with the sugar. That can match a can of soda. Half sweet, half unsweet is an easy step down."}, {"q": "Which cookout condiment usually has the most sugar per serving?", "choices": ["Yellow mustard", "Hot sauce", "BBQ sauce", "Pickle relish"], "a": 2, "ex": "BBQ sauce. Many bottled brands have 10 to 16 grams of sugar in just two tablespoons, which is 3 to 4 teaspoons. Mustard and most hot sauces have almost none."}, {"q": "Which of these on an ingredient list is NOT a type of sugar?", "choices": ["Dextrose", "Evaporated cane juice", "Sodium bicarbonate", "High-fructose corn syrup"], "a": 2, "ex": "Sodium bicarbonate is baking soda. Sugar hides under dozens of names in bread, sauces, seasonings and \"savory\" packaged food. Many of those names end in -ose."}, {"type": "tf", "q": "True or false: Smoked turkey is a low-salt way to season your greens.", "a": 1, "ex": "False. Smoked turkey has less fat than a ham hock, but smoked and cured meats are still loaded with sodium. Onion, garlic, vinegar, red pepper flakes and a little smoked paprika add flavor with less salt."}, {"q": "In a large study reported by the American Heart Association, about how many Black adults had high blood pressure by age 55?", "choices": ["1 in 4", "1 in 2", "3 in 4", "9 in 10"], "a": 2, "ex": "About 3 in 4. High blood pressure usually has no symptoms, which is why it's called the silent killer. Getting your numbers checked at a pharmacy or doctor's office is the only way to know."}, {"q": "About how many Black babies in the U.S. are born with sickle cell trait?", "choices": ["1 in 13", "1 in 100", "1 in 500", "1 in 5,000"], "a": 0, "ex": "About 1 in 13, according to the CDC. The trait usually causes no symptoms, so many adults don't know they carry it. If both parents carry it, each child has a 1 in 4 chance of sickle cell disease. A simple blood test tells you."}, {"q": "In 2023, Black women in the U.S. died from pregnancy-related causes at about how many times the rate of white women?", "choices": ["About the same", "About 1.5 times", "About 3 times", "About 10 times"], "a": 2, "ex": "More than 3 times, according to CDC data. Serena Williams had to push her care team to check for blood clots after giving birth in 2017, and she was right. Speaking up and bringing an advocate to appointments can save lives."}, {"q": "Compared with white men, how likely are Black men to die of prostate cancer?", "choices": ["Less likely", "About as likely", "About twice as likely", "About ten times as likely"], "a": 2, "ex": "About twice as likely. The American Cancer Society suggests Black men talk with their doctor about screening starting at age 45, earlier than the general recommendation."}, {"type": "tf", "q": "True or false: Black people don't need to worry about skin cancer.", "a": 1, "ex": "False. Melanoma is less common in Black people, but it's often caught later, when it's harder to treat. It tends to show up on the palms, the soles of the feet or under the nails. Bob Marley died of a melanoma that started under his toenail."}, {"type": "tf", "q": "True or false: Until 2021, a common kidney test automatically scored Black patients' kidneys as healthier just because they were Black.", "a": 0, "ex": "True. The race adjustment made kidney disease look less serious in Black patients, which delayed referrals and transplant listings. Experts dropped it in 2021, and transplant centers now have to restore the wait time Black patients lost."}]}
 };
 
-// Score titles per quiz, from a perfect score down: [title, line]
+// Weekly sets. Set 1 of each topic uses the topic name as its id ("culture"), so old links keep working.
+// To add a new set, add an entry named topic-N, for example
+//   "culture-2":{added:"Nov 7", qs:[ ...questions... ]},
+// It inherits the title, color, description and note from set 1 and shows up first on the home page.
+const TOPICS=["culture","liberation","money","health"];
+Object.entries(QUIZZES).forEach(([id,q])=>{const m=id.match(/^(.+)-(\d+)$/);q.topic=m?m[1]:id;q.set=m?+m[2]:1;
+  if(q.set>1){const base=QUIZZES[q.topic];["title","kicker","color","dek","note"].forEach(k=>{if(q[k]==null)q[k]=base[k]})}});
+["culture","liberation","money"].forEach(t=>{QUIZZES[t].added=QUIZZES[t].added||"Oct 30"});QUIZZES.health.added=QUIZZES.health.added||"Oct 31";
+function setsFor(t){return Object.entries(QUIZZES).filter(([,q])=>q.topic===t).sort((a,b)=>b[1].set-a[1].set)}
+function setLabel(qz){return setsFor(qz.topic).length>1?` · Set ${qz.set}`:""}
+
+// Score titles per topic, from a perfect score down: [title, line]
 const RANKS = {
   culture:[
     ["Cookout Royalty","Perfect score. You get a plate to take home, and nobody's checking your potato salad."],
@@ -188,7 +204,7 @@ const RANKS = {
   ],
   health:[["The Family Doctor (Unofficial)", "Perfect score. The whole family is calling you before they call the doctor."], ["Label Reader", "You check what's in it before it goes in you. Keep it up."], ["Greens, Hold the Ham Hock", "You're making better choices. One more round gets you the rest of the way."], ["Auntie's Group Chat", "You've been getting health facts from forwarded messages. Run it back."]]
 };
-function rankFor(id,score,n){const r=RANKS[id];const p=score/n;return score===n?r[0]:p>=.7?r[1]:p>=.4?r[2]:r[3]}
+function rankFor(id,score,n){const r=RANKS[QUIZZES[id].topic];const p=score/n;return score===n?r[0]:p>=.7?r[1]:p>=.4?r[2]:r[3]}
 const app=document.getElementById("app");
 const BASE="https://jamagarr1.github.io/roots-and-wealth/";
 function linkFor(id){return id?BASE+"#"+id:BASE}
@@ -213,11 +229,19 @@ function home(){
   h.appendChild(el("p","dek","Four quizzes on Black culture, liberation, money and health. Pick one, answer as you go, and send a quiz to a friend to see who scores higher."));
   app.appendChild(h);
   const tiles=el("div","tiles"); const best=getBest();
-  Object.entries(QUIZZES).forEach(([id,qz])=>{
+  TOPICS.forEach(t=>{
+    const sets=setsFor(t); const [id,qz]=sets[0];
+    const wrap=el("div","topic");
     const a=el("a","tile"); a.href="#"+id; a.style.setProperty("--c",`var(${qz.color})`);
     a.appendChild(el("h2",null,qz.title)); a.appendChild(el("p",null,qz.dek));
-    a.appendChild(el("span","count",best[id]!=null?`Best ${best[id]}/${qz.qs.length}`:`${qz.qs.length} questions`));
-    tiles.appendChild(a);
+    a.appendChild(el("span","count",(sets.length>1?`Set ${qz.set} · `:"")+(best[id]!=null?`Best ${best[id]}/${qz.qs.length}`:`${qz.qs.length} questions`)));
+    wrap.appendChild(a);
+    if(sets.length>1){
+      const older=el("div","older"); older.appendChild(el("span",null,"Earlier sets:"));
+      sets.slice(1).forEach(([oid,oq])=>{const l=el("a","chip",`Set ${oq.set} · ${oq.added}`+(best[oid]!=null?` · ${best[oid]}/${oq.qs.length}`:"")); l.href="#"+oid; older.appendChild(l)});
+      wrap.appendChild(older);
+    }
+    tiles.appendChild(wrap);
   });
   app.appendChild(tiles);
   app.appendChild(shareRow(`Test what you know about Black culture, liberation, money and health. Four quick quizzes: ${linkFor()}`,"Copy link to text a friend","share-home"));
@@ -228,10 +252,10 @@ function runQuiz(id){
   let i=0,score=0,results=[];
   app.innerHTML="";
   const back=el("a","back","← All quizzes"); back.href="#";
-  const h=el("header"); h.appendChild(el("div","kicker",qz.kicker)); h.appendChild(el("h1",null,qz.title)); h.appendChild(el("p","dek",qz.dek));
+  const h=el("header"); h.appendChild(el("div","kicker",qz.kicker+setLabel(qz))); h.appendChild(el("h1",null,qz.title)); h.appendChild(el("p","dek",qz.dek));
   const prog=el("div","progress"); prog.setAttribute("aria-hidden","true");
   const stage=el("main"); stage.setAttribute("aria-live","polite");
-  app.append(back,h,shareRow(`Try the "${qz.title}" quiz on ${qz.kicker.toLowerCase()}: ${linkFor(id)}`,"Copy quiz link",id+"-share"),prog,stage);
+  app.append(back,h,shareRow(`Try the "${qz.title}" quiz on ${qz.kicker.toLowerCase()}${setLabel(qz)}: ${linkFor(id)}`,"Copy quiz link",id+"-share"),prog,stage);
   if(qz.note) app.appendChild(el("p","note",qz.note));
 
   function drawProgress(){prog.innerHTML="";qz.qs.forEach((_,k)=>{const s=el("span");if(results[k]===true)s.className="right";else if(results[k]===false)s.className="wrong";else if(k===i)s.className="now";prog.appendChild(s)})}
@@ -263,11 +287,13 @@ function runQuiz(id){
     const again=el("button","btn","Take it again"); again.id=id+"-again"; again.onclick=()=>{i=0;score=0;results=[];render()};
     const brag=el("button","btn ghost","Copy my score"); brag.id=id+"-copy";
     const ok=el("span","copied"); ok.hidden=true;
-    brag.onclick=()=>{const t=`I got ${score}/${n} on the "${qz.title}" quiz and earned the title "${rank}." Think you can beat me? ${linkFor(id)}`;
+    brag.onclick=()=>{const t=`I got ${score}/${n} on the "${qz.title}" quiz${setLabel(qz)} and earned the title "${rank}." Think you can beat me? ${linkFor(id)}`;
       const done=()=>{ok.textContent="Copied. Paste it into a text.";ok.hidden=false};
       try{navigator.clipboard.writeText(t).then(done,()=>{ok.textContent=t;ok.hidden=false})}catch(e){ok.textContent=t;ok.hidden=false}};
     const more=el("a","btn ghost","Other quizzes"); more.href="#";
-    row.append(again,brag,more,ok); card.appendChild(row); stage.appendChild(card);
+    row.append(again,brag,more);
+    setsFor(qz.topic).filter(([o])=>o!==id).forEach(([o,oq])=>{const l=el("a","btn ghost",`Play Set ${oq.set}`); l.href="#"+o; row.appendChild(l)});
+    row.appendChild(ok); card.appendChild(row); stage.appendChild(card);
   }
   render();
 }
